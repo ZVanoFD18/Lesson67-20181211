@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson67-20181211-homework</title>
+    <script src="index.js"></script>
+</head>
+<body>
+<pre>
+1. Создание формы для ввода точек графика (x, y) нажатию кнопки получаем массив объектов в JSON формате.
+Обязательным условием являеться использование паттерна Адаптер.
+</pre>
+<form name="xyForm" action="">
+    <label for="">
+        X:
+        <input type="text" name="posX">
+    </label>
+    <label for="">
+        Y:
+        <input type="text" name="posY">
+    </label>
+    <button id="buttonAdd">Добавить</button>
+    <hr>
+    <button id="buttonShowList">Показать массив JSON-объектов(консоль)</button>
+    <button id="buttonResult">Рисовать график(применить адаптер)</button>
+    <button id="buttonCanvasClear">Очистить Canvas</button>
+</form>
+<canvas id="canvasGraph" width="800" height="600" style="border: 1px solid red">
+</canvas>
+<script>
+    window.onload = function(){
+        document.getElementById('buttonAdd').addEventListener('click', (event)=>{
+            event.preventDefault();
+            let x = +document.forms.xyForm.elements.posX.value,
+                y = +document.forms.xyForm.elements.posY.value;
+            if(x === undefined || y=== undefined){
+                return;
+            }
+            Task.App.jXYList.addXY(x, y);
+        });
+        document.getElementById('buttonShowList').addEventListener('click', (event)=>{
+            event.preventDefault();
+            console.log(Task.App.jXYList);
+        });
+        document.getElementById('buttonResult').addEventListener('click', (event)=>{
+            event.preventDefault();
+            /**
+             * Создаем адаптер, в который загоняем массив JSON-ов
+             * @type {Task.AdapteerJsonXYList2PointCollection}
+             */
+            let adapter = new Task.AdapteerJsonXYList2PointCollection(Task.App.jXYList);
+            // adapter.setList(Task.App.jXYList);
+            console.log('Адаптер', adapter);
+            Task.App.draw(adapter, document.getElementById('canvasGraph'));
+        });
+        document.getElementById('buttonCanvasClear').addEventListener('click', (event)=>{
+            event.preventDefault();
+            let canvas = document.getElementById('canvasGraph');
+            canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+        });
+    }
+</script>
+</body>
+</html>

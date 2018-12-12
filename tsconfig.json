@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "target": "es3",
+    "removeComments": false,
+    "outFile": "index.js"
+  }
+}
